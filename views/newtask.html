@@ -5,13 +5,21 @@
     </head>
     <a href="/">Home</a>
     <a href="/listtasks">List All Tasks</a>
+    <a href="/deletetask">Delete Task</a>
+    <a href="/deletecompleted">Delete Completed Tasks</a>
+    <a href="/updatetask">Update Task Status</a>
     <br>
     <br>
     <form action="/newtask" method="POST">
         Task Name
         <input type="text" name="taskname" /> </br>
-        Task Due
-        <input type="text" name="taskdue" /> </br>
+        Assign To
+        <input type="text" name="taskassign" /> </br>
+        Due Date
+        <input type="date" name="taskdue" /> </br>
+        Task Status
+        <input type="radio" name="taskstatus" value="In Progress" checked> In Progress
+        <input type="radio" name="taskstatus" value="Complete"> Complete</br>
         Task Desc
         <input type="text" name="taskdesc" /> </br>
         <br>

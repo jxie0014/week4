@@ -10,21 +10,36 @@
 <body>
         <a href="/">Home</a>
         <a href="/newtask">Add New Tasks</a>
+        <a href="/deletetask">Delete Task</a>
+        <a href="/deletecompleted">Delete Completed Tasks</a>
+        <a href="/updatetask">Update Task Status</a>
         <br>
         <br>
         <table>
             <tr>
+                <td>Id</td>
                 <td>Name</td>
-                <td>Due Date</td>
+                <td>Assign to</td>
+                <td>Due date</td>
+                <td>Status</td>
                 <td>Description</td>
             </tr>
             <% for (let i =0; i< db.length; i++){ %>
                 <tr>
                     <td>
+                        <%= db[i].taskid %>
+                    </td>
+                    <td>
                         <%= db[i].taskname %>
                     </td>
                     <td>
+                        <%= db[i].taskassign %>
+                    </td>
+                    <td>
                         <%= db[i].taskdue %>
+                    </td>
+                    <td>
+                        <%= db[i].taskstatus %>
                     </td>
                     <td>
                         <%= db[i].taskdesc %>
