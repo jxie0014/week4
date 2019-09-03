@@ -104,4 +104,14 @@ app.post('/updatetask', function (req, res) {
         }
     });
 });
+app.get('/findNotTomorrow', function (req, res) {
+    let tasktofind = { taskdue: { $ne: '2019-09-04' } };
+    db.collection('week5table').find(tasktofind).toArray(function (err, data) {
+        if (err) {
+            res.redirect('/404');
+        } else {
+            res.render('listtasks.html', { db: data });
+        }
+    });
+});
 app.listen(8080);
