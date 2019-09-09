@@ -10,22 +10,21 @@
 <body>
         <a href="/">Home</a><br>
         <a href="/newdeveloper">Add New Developer</a><br>
-        <a href="/listdevelopers">List All Developers</a><br>
         <a href="/newtask">Add New Tasks</a><br>
+        <a href="/listtasks">List All Tasks</a><br>
         <a href="/deletetask">Delete Task</a><br>
         <a href="/deletecompleted">Delete Completed Tasks</a><br>
         <a href="/updatetask">Update Task Status</a><br>
         <a href="/findNotTomorrow">Extra Task</a>
+        
         <br>
         <br>
         <table>
             <tr>
                 <td>Id</td>
                 <td>Name</td>
-                <td>Assign to</td>
-                <td>Due date</td>
-                <td>Status</td>
-                <td>Description</td>
+                <td>Level</td>
+                <td>Address</td>
             </tr>
             <% for (let i =0; i< db.length; i++){ %>
                 <tr>
@@ -33,19 +32,13 @@
                         <%= db[i]._id %>
                     </td>
                     <td>
-                        <%= db[i].name %>
+                        <%= db[i].name.firstName %> <%= db[i].name.lastName %> 
                     </td>
                     <td>
-                        <%= db[i].assignto.name.firstName %>
+                        <%= db[i].level %>
                     </td>
                     <td>
-                        <%= db[i].due %>
-                    </td>
-                    <td>
-                        <%= db[i].status %>
-                    </td>
-                    <td>
-                        <%= db[i].desc %>
+                        <%= db[i].address.unit %> <%= db[i].address.street %> <%= db[i].address.suburb %> <%= db[i].address.state %> 
                     </td>
                 </tr>
                 <% }%>

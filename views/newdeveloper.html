@@ -1,0 +1,32 @@
+<html>
+<body>
+    <head>
+            <link rel="stylesheet" href="styles.css">
+    </head>
+    <a href="/">Home</a><br>
+    <a href="/listdevelopers">List All Developers</a><br>
+    <a href="/newtask">Add New Tasks</a><br>
+    <a href="/listtasks">List All Tasks</a><br>
+    <a href="/deletetask">Delete Task</a><br>
+    <a href="/deletecompleted">Delete Completed Tasks</a><br>
+    <a href="/updatetask">Update Task Status</a><br>
+    <a href="/findNotTomorrow">Extra Task</a>
+    <br>
+    <br>
+    <form action="/newdeveloper" method="POST">
+        Name<br>
+        <input type="text" name="firstname" placeholder="First name"/> </br>
+        <input type="text" name="lastname" placeholder="Last name"/> </br><br>
+        Address<br>
+        <input type="text" name="state" placeholder="State"/> </br>
+        <input type="text" name="suburb" placeholder="Suburb"/> </br>
+        <input type="text" name="street" placeholder="Street"/> </br>
+        <input type="text" name="unit" placeholder="Unit"/> </br><br>
+        Level
+        <input type="radio" name="level" value="Beginner" checked> Beginner
+        <input type="radio" name="level" value="Expert"> Expert</br>
+        <br>
+        <button>Submit</button>
+    </form>
+</body>
+</html>

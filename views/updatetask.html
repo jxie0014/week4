@@ -3,17 +3,19 @@
     <head>
             <link rel="stylesheet" href="styles.css">
     </head>
-    <a href="/">Home</a>
-    <a href="/newtask">Add New Tasks</a>
-    <a href="/listtasks">List All Tasks</a>
-    <a href="/deletetask">Delete Task</a>
-    <a href="/deletecompleted">Delete Completed Tasks</a>
+    <a href="/">Home</a><br>
+    <a href="/newdeveloper">Add New Developer</a><br>
+    <a href="/listdevelopers">List All Developers</a><br>
+    <a href="/newtask">Add New Tasks</a><br>
+    <a href="/listtasks">List All Tasks</a><br>
+    <a href="/deletetask">Delete Task</a><br>
+    <a href="/deletecompleted">Delete Completed Tasks</a><br>
     <a href="/findNotTomorrow">Extra Task</a>
     <br>
     <br>
     <form action="/updatetask" method="POST">
         Task to Update
-        <input type="text" name="tasktoupdate" /> </br>
+        <input type="text" name="toupdate" /> </br>
         New Status
         <input type="radio" name="newstatus" value="In Progress" checked> In Progress
         <input type="radio" name="newstatus" value="Complete"> Complete</br>

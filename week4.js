@@ -1,9 +1,7 @@
-//import packages
 let express = require('express');
 let bodyParser = require('body-parser');
-let mongodb = require('mongodb');
+let mongoose = require('mongoose');
 
-//configure express
 let app = express();
 
 app.engine('html', require('ejs').renderFile);
@@ -16,32 +14,61 @@ app.use(bodyParser.urlencoded({
 app.use(express.static('images'));
 app.use(express.static('css'));
 
-//configure mongodb
-let MongoClient = mongodb.MongoClient;
-//connection url
-let url = "mongodb://localhost:27017/";
-//reference to database
-let db;
-//connect to mongoDB server
-MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true },
-    function (err, client) {
-        if (err) {
-            console.log("Err  ", err);
-        } else {
-            console.log("Connected successfully to server");
-            db = client.db("fit2095db");
-        }
-    });
+let Task = require('./models/task');
+let Developer = require('./models/developer');
+
+mongoose.connect('mongodb://localhost:27017/todoDB', function (err) {
+    if (err) {
+        console.log('Error in Mongoose connection');
+    } else {
+        console.log('Successfully connected');
+    }
+});
 
 app.get('/', function (req, res) {
     res.render('index.html');
 });
-app.get('/listtasks', function (req, res) {
-    db.collection('week5table').find({}).toArray(function (err, data) {
+app.get('/listdevelopers', function (req, res) {
+    Developer.find({}, function (err, docs) {
         if (err) {
-            res.redirect('/404');
+            res.send('Error');
         } else {
-            res.render('listtasks.html', { db: data });
+            res.render('listdevelopers.html', { db: docs });
+        }
+      });
+});
+app.get('/listtasks', function (req, res) {
+    Task.find({}).populate('assignto').exec(function (err, docs) {
+        if (err) {
+            res.send('Error');
+        } else {
+            res.render('listtasks.html', { db: docs });
+        }
+      });
+});
+app.get('/newdeveloper', function (req, res) {
+    res.render('newdeveloper.html');
+});
+app.post('/newdeveloper', function (req, res) {
+    let developer = new Developer({
+        _id: new mongoose.Types.ObjectId(),
+        name: {
+            firstName: req.body.firstname,
+            lastName: req.body.lastname
+            },
+        level: req.body.level,
+        address: {
+            state: req.body.state,
+            suburb: req.body.suburb,
+            street: req.body.street,
+            unit: req.body.unit
+        }
+    });
+    developer.save(function (err) {
+        if (err) {
+            res.send('Error');
+        } else {
+            res.redirect('/listdevelopers');
         }
     });
 });
@@ -49,39 +76,39 @@ app.get('/newtask', function (req, res) {
     res.render('newtask.html');
 });
 app.post('/newtask', function (req, res) {
-    let taskid = Math.round(Math.random()*1000);
-    let task = req.body;
-    db.collection('week5table').insertOne({
-        taskid: taskid,
-        taskname: task.taskname, 
-        taskassign: task.taskassign,
-        taskdue: task.taskdue,
-        taskstatus: task.taskstatus,
-        taskdesc: task.taskdesc
+    let task = new Task({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        assignto: req.body.assignto,
+        due: req.body.due,
+        status: req.body.status,
+        desc: req.body.desc
     });
-    res.redirect('/listtasks');
+    task.save(function (err) {
+        if (err) {
+            res.send('Error');
+        } else {
+            res.redirect('/listtasks');
+        }
+    });
 });
+
 app.get('/deletetask', function (req, res) {
     res.render('deletetask.html');
 });
 app.post('/deletetask', function (req, res) {
-    let task = req.body;
-    let tasktodelete = { taskid: parseInt(task.tasktodelete) };
-    db.collection('week5table').deleteOne(tasktodelete, function (err, obj) {
+    Task.deleteOne({ '_id': req.body.todelete}, function (err, doc) {
         if (err) {
-            res.redirect('/404');
-        } else if (obj.result.n === 0) {
-            res.send("Task Not Found");
+            res.send('Error');
         } else {
             res.redirect('/listtasks');
         }
     });
 });
 app.get('/deletecompleted', function (req, res) {
-    let tasktodelete = { taskstatus: 'Complete' };
-    db.collection('week5table').deleteMany(tasktodelete, function (err, obj) {
+    Task.deleteMany({ 'status': 'Complete' }, function (err, doc) {
         if (err) {
-            res.redirect('/404');
+            res.send('Error');
         } else {
             res.redirect('/listtasks');
         }
@@ -91,14 +118,9 @@ app.get('/updatetask', function (req, res) {
     res.render('updatetask.html');
 });
 app.post('/updatetask', function (req, res) {
-    let task = req.body;
-    let tasktoupdate = { taskid: parseInt(task.tasktoupdate) };
-    let update = { $set: {taskstatus: task.newstatus } };
-    db.collection("week5table").updateOne(tasktoupdate, update, { upsert: false }, function (err, result) {
+    Task.updateMany({ '_id': req.body.toupdate }, { $set: { 'status': req.body.newstatus } }, function (err, doc) {
         if (err) {
-            res.redirect('/404');
-        } else if (result.result.n === 0){
-            res.send("Task Not Found");
+            res.send('Error');
         } else {
             res.redirect('/listtasks');
         }
@@ -108,7 +130,7 @@ app.get('/findNotTomorrow', function (req, res) {
     let tasktofind = { taskdue: { $ne: '2019-09-04' } };
     db.collection('week5table').find(tasktofind).toArray(function (err, data) {
         if (err) {
-            res.redirect('/404');
+            res.send('Error');
         } else {
             res.render('listtasks.html', { db: data });
         }
