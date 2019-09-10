@@ -11,7 +11,18 @@ let developerSchema = mongoose.Schema({
         },
     level: {
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: function (level) {
+                if (level === 'Beginner' || level ==='Expert'){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            },
+        }
     },
     address: {
         state:String,

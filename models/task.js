@@ -8,7 +8,20 @@ let taskSchema = mongoose.Schema({
         ref: 'Developer'
     },
     due: Date,
-    status: String,
+    status: {
+        type: String,
+        validate: {
+            validator: function (status) {
+                if (status === 'Complete' || status ==='In Progress'){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            },
+        }
+    },
     desc: String
 });
 
