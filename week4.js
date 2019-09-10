@@ -32,6 +32,7 @@ app.get('/listdevelopers', function (req, res) {
     Developer.find({}, function (err, docs) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.render('listdevelopers.html', { db: docs });
         }
@@ -41,6 +42,7 @@ app.get('/listtasks', function (req, res) {
     Task.find({}).populate('assignto').exec(function (err, docs) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.render('listtasks.html', { db: docs });
         }
@@ -67,6 +69,7 @@ app.post('/newdeveloper', function (req, res) {
     developer.save(function (err) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.redirect('/listdevelopers');
         }
@@ -87,6 +90,7 @@ app.post('/newtask', function (req, res) {
     task.save(function (err) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.redirect('/listtasks');
         }
@@ -100,6 +104,7 @@ app.post('/deletetask', function (req, res) {
     Task.deleteOne({ '_id': req.body.todelete}, function (err, doc) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.redirect('/listtasks');
         }
@@ -109,6 +114,7 @@ app.get('/deletecompleted', function (req, res) {
     Task.deleteMany({ 'status': 'Complete' }, function (err, doc) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.redirect('/listtasks');
         }
@@ -121,8 +127,19 @@ app.post('/updatetask', function (req, res) {
     Task.updateMany({ '_id': req.body.toupdate }, { $set: { 'status': req.body.newstatus } }, function (err, doc) {
         if (err) {
             res.send('Error');
+            console.log(err);
         } else {
             res.redirect('/listtasks');
+        }
+    });
+});
+app.get('/:oldfirstname/:newfirstname', function (req, res) {
+    Developer.updateMany({ 'name.firstName': req.params.oldfirstname }, { $set: { 'name.firstName': req.params.newfirstname } }, function (err, doc) {
+        if (err) {
+            res.send('Error');
+            console.log(err);
+        } else {
+            res.redirect('/listdevelopers');
         }
     });
 });
